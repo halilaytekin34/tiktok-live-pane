@@ -1,0 +1,31 @@
+---
+
+## ✅ 2. `node-server/index.js`
+
+📁 **`/node-server/index.js`** – TikTok Live bağlantısı için
+
+```js
+const express = require("express");
+const axios = require("axios");
+const app = express();
+const port = 3001;
+
+app.use(express.json());
+
+app.post("/start", async (req, res) => {
+    const username = req.body.username;
+    console.log(`TikTok canlı yayına bağlanılıyor: @${username}`);
+
+    // Simülasyon amaçlı webhook gönderimi
+    await axios.post("http://localhost:8000/api/webhook/node", {
+        event: "user_join",
+        username: username,
+        avatar: "https://example.com/avatar.jpg"
+    });
+
+    res.json({ status: "ok", message: "Yayına bağlanıldı" });
+});
+
+app.listen(port, () => {
+    console.log(`Node.js TikTok sunucusu ${port} portunda çalışıyor`);
+});
